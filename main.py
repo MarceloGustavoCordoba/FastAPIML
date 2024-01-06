@@ -19,7 +19,7 @@ FTP_REMOTE_FOLDER = '/marcelo/Marcor/notificaciones'
 
 @app.get('/')
 def read_root():
-    return {"Hello":{"World"}}
+    return "Proceso Completo."
 
 @app.post('/callbacks')
 async def webhook(request: Request):
