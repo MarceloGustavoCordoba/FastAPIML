@@ -43,7 +43,7 @@ async def webhook(request: Request):
 
         print(f'Notificación cargada en el servidor FTP en {FTP_REMOTE_FOLDER}/{filename}')
 
-        return JSONResponse(content={'message': 'success'}, status_code=200)
+        return JSONResponse(content={'message': 'OK'}, status_code=200)
 
     except Exception as e:
         print(f'Error al procesar la notificación: {e}')
