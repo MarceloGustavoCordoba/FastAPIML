@@ -21,15 +21,7 @@ FTP_REMOTE_FOLDER = '/marcelo/Marcor/notificaciones'
 def read_root():
     return {"Hello":{"World"}}
 
-@app.get('/items/{item_id}')
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, 'q': q}
-
-@app.put('/item/{item_id}')
-def update_item(item_id: int, item: Item):
-    return {'items_name': item.name, 'item_id': item_id}
-
-@app.post('/webhook')
+@app.post('/callbacks')
 async def webhook(request: Request):
     try:
         # Obtener el contenido JSON de la notificación
