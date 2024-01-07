@@ -44,8 +44,7 @@ def read_root():
 async def webhook(request: Request):
     try:
         # Obtener el contenido JSON de la notificación
-        notification_data = await request.json()
-        insert_notification(notification_data)
+        insert_notification(request.json())
 
         return JSONResponse(content={'message': 'OK'}, status_code=200)
 
