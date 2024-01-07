@@ -4,19 +4,38 @@ from pydantic import BaseModel
 from models.item_model import Item
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
-import json
-from ftplib import FTP
 from datetime import datetime
-import io
+import psycopg2
+from psycopg2 import sql
 
 app = FastAPI()
 
-# Configuración del servidor FTP
-FTP_HOST = 'srva194.controlvps.com'
-FTP_USER = 'marcelocordoba'
-FTP_PASSWORD = 'Hudson.2024!'
-FTP_REMOTE_FOLDER = '/marcelo/Marcor/notificaciones'
+def get_db_connection():
+    # Devuelve una conexión a la base de datos (asegúrate de proporcionar los valores correctos)
+    conn = psycopg2.connect(
+        dbname='mercadolibre',
+        user='sa',
+        password='ZcdcuIMgzdD3vnO58UW3h0Ra0UpSjfaE',
+        host='dpg-cmcrgdn109ks7392qm4g-a.oregon-postgres.render.com',
+        port='5432'
+    )
+    return conn
 
+def insert_notification(data):
+    conn = get_db_connection()
+    
+    try:
+        cursor = conn.cursor()
+        insert_query = """
+            INSERT INTO notifications (_id, topic, resource, user_id, application_id, sent, attempts, received)
+            VALUES (%(_id)s, %(topic)s, %(resource)s, %(user_id)s, %(application_id)s, %(sent)s, %(attempts)s, %(received)s)
+        """
+        cursor.execute(insert_query, data)
+        conn.commit()
+    finally:
+        cursor.close()
+        conn.close()
+        
 @app.get('/')
 def read_root():
     return "Proceso Completo."
@@ -26,22 +45,7 @@ async def webhook(request: Request):
     try:
         # Obtener el contenido JSON de la notificación
         notification_data = await request.json()
-
-        # Crear un nombre de archivo único basado en la fecha y hora
-        timestamp = datetime.now().strftime('%Y%m%d%H%M%S%f')
-        filename = f'{timestamp}_notification.json'
-
-        # Crear un objeto de tipo bytes en memoria
-        in_memory_file = io.BytesIO(json.dumps(notification_data, indent=2).encode('utf-8'))
-
-        # Conectar al servidor FTP y cargar el archivo directamente desde la memoria
-        with FTP(FTP_HOST) as ftp:
-            ftp.login(FTP_USER, FTP_PASSWORD)
-            ftp.cwd(FTP_REMOTE_FOLDER)
-
-            ftp.storbinary(f'STOR {filename}', in_memory_file)
-
-        print(f'Notificación cargada en el servidor FTP en {FTP_REMOTE_FOLDER}/{filename}')
+        insert_notification(notification_data)
 
         return JSONResponse(content={'message': 'OK'}, status_code=200)
 
