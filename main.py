@@ -18,7 +18,7 @@ def get_db_connection():
         user='sa',
         password='ZcdcuIMgzdD3vnO58UW3h0Ra0UpSjfaE',
         #Interno
-        host='dpg-cmcrgdn109ks7392qm4g-a/mercadolibre',
+        host='dpg-cmcrgdn109ks7392qm4g-a',
         #Externo
 #        host='dpg-cmcrgdn109ks7392qm4g-a.oregon-postgres.render.com',
         port='5432'
