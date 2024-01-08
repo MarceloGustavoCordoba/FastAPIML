@@ -51,7 +51,7 @@ def read_root():
 @app.post('/callbacks')
 def webhook(request: Request):
     try:
-        print(request.json)
+        print(request.json())
         insert_notification(request.json())
         return JSONResponse(content={'message': 'OK'}, status_code=200)
     except Exception as e:
