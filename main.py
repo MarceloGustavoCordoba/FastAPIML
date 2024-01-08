@@ -43,9 +43,9 @@ def read_root():
     return "Proceso Completo."
 
 @app.post('/callbacks')
-async def webhook(request: Request):
+def webhook(request: Request):
     try:
-        # Obtener el contenido JSON de la notificación
+        print(request.json)
         insert_notification(request.json())
         return JSONResponse(content={'message': 'OK'}, status_code=200)
     except Exception as e:
