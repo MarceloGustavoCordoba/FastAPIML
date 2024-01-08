@@ -49,10 +49,11 @@ def read_root():
     return "Proceso Completo."
 
 @app.post('/callbacks')
-def webhook(request: Request):
+async def webhook(request: Request):
     try:
-        print(request.json())
-        insert_notification(request.json())
+        payload= await request.json()
+        print(payload)
+        insert_notification(payload)
         return JSONResponse(content={'message': 'OK'}, status_code=200)
     except Exception as e:
         # Registrar el error
