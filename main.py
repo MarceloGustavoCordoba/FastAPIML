@@ -1,14 +1,13 @@
-from fastapi import FastAPI
-from typing import Union
-from pydantic import BaseModel
-from models.item_model import Item
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import psycopg2
-from psycopg2 import sql
+import logging
 
 app = FastAPI()
+
+# Configurar el sistema de logging
+logging.basicConfig(filename='app.log', level=logging.ERROR)
 
 def get_db_connection():
     # Devuelve una conexión a la base de datos (asegúrate de proporcionar los valores correctos)
@@ -32,6 +31,9 @@ def insert_notification(data):
         """
         cursor.execute(insert_query, data)
         conn.commit()
+    except Exception as e:
+        # Registrar el error
+        logging.error(f'Error al insertar notificación en la base de datos: {e}')
     finally:
         cursor.close()
         conn.close()
@@ -45,9 +47,8 @@ async def webhook(request: Request):
     try:
         # Obtener el contenido JSON de la notificación
         insert_notification(request.json())
-
         return JSONResponse(content={'message': 'OK'}, status_code=200)
-
     except Exception as e:
-        print(f'Error al procesar la notificación: {e}')
+        # Registrar el error
+        logging.error(f'Error al procesar la notificación: {e}')
         raise HTTPException(status_code=500, detail='Internal Server Error')
