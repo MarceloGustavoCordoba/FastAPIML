@@ -11,14 +11,20 @@ logging.basicConfig(filename='app.log', level=logging.ERROR)
 
 def get_db_connection():
     # Devuelve una conexión a la base de datos (asegúrate de proporcionar los valores correctos)
+    
+    ## EXTERNA
     conn = psycopg2.connect(
         dbname='mercadolibre',
         user='sa',
         password='ZcdcuIMgzdD3vnO58UW3h0Ra0UpSjfaE',
-        host='dpg-cmcrgdn109ks7392qm4g-a.oregon-postgres.render.com',
+        #Interno
+        host='dpg-cmcrgdn109ks7392qm4g-a/mercadolibre',
+        #Externo
+#        host='dpg-cmcrgdn109ks7392qm4g-a.oregon-postgres.render.com',
         port='5432'
     )
     return conn
+
 
 def insert_notification(data):
     conn = get_db_connection()
@@ -26,7 +32,7 @@ def insert_notification(data):
     try:
         cursor = conn.cursor()
         insert_query = """
-            INSERT INTO notifications (_id, topic, resource, user_id, application_id, sent, attempts, received)
+            INSERT INTO notificaciones (_id, topic, resource, user_id, application_id, sent, attempts, received)
             VALUES (%(_id)s, %(topic)s, %(resource)s, %(user_id)s, %(application_id)s, %(sent)s, %(attempts)s, %(received)s)
         """
         cursor.execute(insert_query, data)
