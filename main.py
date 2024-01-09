@@ -1,10 +1,12 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from datetime import datetime
-from database import database_utils as db
+from database import database as db
 import logging
 import pandas as pd
 from sqlalchemy import create_engine,text
+from models import Base, Notificacion
+import os
 
 app = FastAPI()
 logging.basicConfig(filename='app.log', level=logging.DEBUG)
@@ -17,7 +19,6 @@ def read_root():
 async def webhook(request: Request):
     try:
         payload= await request.json()
-        print(payload)
         db.insert_notification(payload)
         return JSONResponse(content={'message': 'OK'}, status_code=200)
     except Exception as e:
