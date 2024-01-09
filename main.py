@@ -5,7 +5,6 @@ from database import database as db
 import logging
 import pandas as pd
 from sqlalchemy import create_engine,text
-from models import Base, Notificacion
 import os
 
 app = FastAPI()
