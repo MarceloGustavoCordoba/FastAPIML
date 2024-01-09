@@ -4,7 +4,7 @@ from sqlalchemy import create_engine,text
 import logging
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Base, Notificacion
+from models.bd_mercadolibre import Base, Notificacion
 from datetime import datetime
 
 def execute_query_as_dataframe(query):
