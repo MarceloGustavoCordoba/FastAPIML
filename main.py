@@ -33,6 +33,6 @@ async def webhook(request: Request):
         raise HTTPException(status_code=500, detail='Internal Server Error')
 
 # modificar para que al autorizar un cliente nuevo lea el codigo y realice el regitro en la bbdd de la base de datos y comienze a poblar la bbdd
-@app.get('/redirect')
+@app.get('/MLA_redirect')
 async def redireccionamiento(code: str = Query(...)):
     return {"codigo de redireccionamiento" : code}
