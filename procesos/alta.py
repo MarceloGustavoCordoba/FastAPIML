@@ -21,4 +21,4 @@ def alta_usuario(code,site):
     
     return{"codigo de redireccionamiento:" : code,
            "Site:" : site,
-           "resp: ": respuesta}
+           "resp: ": respuesta.text}
