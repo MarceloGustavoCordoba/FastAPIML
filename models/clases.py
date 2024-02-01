@@ -26,4 +26,15 @@ class Parametros:
         self.status_actualizacion = status_actualizacion
         self.vencimiento_token = vencimiento_token
 
-        
+
+class ClienteNuevo:
+    def __init__(self, app_id=None, client_secret=None, code=None, redirect_uri=None,
+                 code_verifier=None, access_token=None, refresh_token=None, user_id=None):
+        self.app_id = app_id
+        self.client_secret = client_secret
+        self.code = code
+        self.redirect_uri = redirect_uri
+        self.code_verifier = code_verifier
+        self.access_token = access_token
+        self.refresh_token = refresh_token
+        self.user_id = user_id

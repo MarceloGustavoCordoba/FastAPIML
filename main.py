@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.responses import JSONResponse
 from datetime import datetime
-from procesos import notificaciones
+from procesos import notificaciones,alta
 import logging
 import pandas as pd
 from sqlalchemy import create_engine,text
@@ -35,4 +35,5 @@ async def webhook(request: Request):
 # modificar para que al autorizar un cliente nuevo lea el codigo y realice el regitro en la bbdd de la base de datos y comienze a poblar la bbdd
 @app.get('/MLA_redirect')
 async def redireccionamiento(code: str = Query(...)):
-    return {"codigo de redireccionamiento" : code}
+    carga = alta.alta_usuario(code,"MLA")
+    return carga

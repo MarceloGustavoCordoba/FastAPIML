@@ -36,10 +36,7 @@ def gen_parametros(user_id, conn_str=None):
     parametros = clases.Parametros()
 
     parametros.user_id = user_id
-    if conn_str is None:
-        parametros.conn_str = os.getenv("DATABASE_URL")
-    else:
-        parametros.conn_str = conn_str
+    parametros.conn_str=database.conexion()
         
     query="select app_id, code, access_token, refresh_token, vencimiento_token from conexion_clientes where user_id=" + str(parametros.user_id)
     conexion_clientes=database.execute_query_as_list(query,parametros.conn_str)

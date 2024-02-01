@@ -9,7 +9,7 @@ def get_token(parametros):
         
     url = "https://api.mercadolibre.com/oauth/token"
 
-    payload = 'grant_type=authorization_code&client_id=' + str(parametros.app_id) + '&client_secret=' + parametros.client_secret + '&code=' + (parametros.code) + '&redirect_uri=' + parametros.redirect_uri + '&code_verifier=' + parametros.code_verifier
+    payload = 'grant_type=authorization_code&client_id=' + str(parametros.app_id) + '&client_secret=' + parametros.client_secret + '&code=' + (parametros.code) + '&redirect_uri=' + parametros.redirect_uri + '&code_verifier==%24CODE_VERIFIER'
     headers = {
     'accept': 'application/json',
     'content-type': 'application/x-www-form-urlencoded'
