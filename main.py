@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.responses import JSONResponse
 from datetime import datetime
 from procesos import notificaciones#,alta
-import logging
+import logging,traceback
 import pandas as pd
 from sqlalchemy import create_engine,text
 import os
@@ -37,18 +37,19 @@ async def webhook(request: Request):
 @app.get('/MLA_redirect')
 async def redireccionamiento(code: str = Query(...)):
  
-        return code   
-#    
-#    try:
-#        cliente = clases.ClienteNuevo("MLA",code)  
-#        cliente.datos_app()
-#        cliente.token()
-#        cliente.name()
-#        cliente.registrar()
-#        return code
-#    except Exception as e:
-#        logging.error(f'Error al procesar la notificación: {e}')
-#        raise HTTPException(status_code=500, detail='Internal Server Error')
+#        return code   
+    
+    try:
+        cliente = clases.ClienteNuevo("MLA",code)  
+        cliente.datos_app()
+        cliente.token()
+        cliente.name()
+        cliente.registrar()
+        return f"Bienvenido {cliente.nickname}! En breve tendras disponible tu historial en tu Weiman."
+    except Exception as e:
+        traza_pila = traceback.format_exc()
+        logging.error(f'Error al procesar la notificación: {e}\n{traza_pila }')
+        raise HTTPException(status_code=500, detail='Internal Server Error')
     
       
     

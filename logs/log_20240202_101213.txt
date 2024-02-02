@@ -1,0 +1,17 @@
+ERROR:root:Error al procesar la notificación: column "mla" does not exist
+LINE 1: ...pp_id, client_secret, uri from aplicaciones where site = MLA
+                                                                    ^
+
+Traceback (most recent call last):
+  File "C:\Users\Usuario\Documents\Proyecto web\FastApiML\main.py", line 44, in redireccionamiento
+    cliente.datos_app()
+  File "C:\Users\Usuario\Documents\Proyecto web\FastApiML\models\clases.py", line 51, in datos_app
+    datos = self.db.cargar_app(self.site)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\Documents\Proyecto web\FastApiML\models\clases.py", line 92, in cargar_app
+    self._cur.execute(f"select app_id, client_secret, uri from aplicaciones where site = {site}")
+psycopg2.errors.UndefinedColumn: column "mla" does not exist
+LINE 1: ...pp_id, client_secret, uri from aplicaciones where site = MLA
+                                                                    ^
+
+

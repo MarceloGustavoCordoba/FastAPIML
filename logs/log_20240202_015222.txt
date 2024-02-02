@@ -1,0 +1,4 @@
+ERROR:root:Error al procesar la notificación: column "mla" does not exist
+LINE 1: ...pp_id, client_secret, uri from aplicaciones where site = MLA
+                                                                    ^
+

@@ -87,7 +87,9 @@ class HandleDB():
         # Asegúrate de tener la tabla 'users' creada en tu base de datos PostgreSQL con la misma estructura.
 
     def cargar_app(self,site):
-        self._cur.execute(f"select app_id, client_secret, uri from aplicaciones where site = {site}")
+        print(site)
+        print(f"select app_id, client_secret, uri from aplicaciones where site = '{site}'")
+        self._cur.execute(f"select app_id, client_secret, uri from aplicaciones where site = '{site}'")
         data = self._cur.fetchone()
         return data
     
