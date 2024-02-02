@@ -36,16 +36,19 @@ async def webhook(request: Request):
 # modificar para que al autorizar un cliente nuevo lea el codigo y realice el regitro en la bbdd de la base de datos y comienze a poblar la bbdd
 @app.get('/MLA_redirect')
 async def redireccionamiento(code: str = Query(...)):
-    try:
-        cliente = clases.ClienteNuevo("MLA",code)  
-        cliente.datos_app()
-        cliente.token()
-        cliente.name()
-        cliente.registrar()
-        return code
-    except Exception as e:
-        logging.error(f'Error al procesar la notificación: {e}')
-        raise HTTPException(status_code=500, detail='Internal Server Error')
+ 
+        return code   
+#    
+#    try:
+#        cliente = clases.ClienteNuevo("MLA",code)  
+#        cliente.datos_app()
+#        cliente.token()
+#        cliente.name()
+#        cliente.registrar()
+#        return code
+#    except Exception as e:
+#        logging.error(f'Error al procesar la notificación: {e}')
+#        raise HTTPException(status_code=500, detail='Internal Server Error')
     
       
     
