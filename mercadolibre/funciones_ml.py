@@ -34,9 +34,9 @@ def refresh_token(parametros):
 
 ## obtener informacion del usuario
 def users_me(parametros):
-    url = "https://api.mercadolibre.com/users/"
-    headers = {'Authorization': 'Bearer ' + parametros.access_token}
-    response = requests.request("POST", url, headers=headers, data={})
+    url = "https://api.mercadolibre.com/users/me/?attributes=nickname"
+    headers = {'Authorization': f'Bearer {parametros.access_token}'}
+    response = requests.request("GET", url, headers=headers, data={})
     return response
 
 def GET(url,headers,payload,parametros):

@@ -2,6 +2,7 @@ from database import database
 from mercadolibre import funciones_ml
 import json
 import psycopg2
+from datetime import datetime
 
 class Parametros:
     def __init__(self, app_id=None, client_secret=None, code=None, redirect_uri=None,
@@ -37,17 +38,17 @@ class ClienteNuevo():
     def __init__(self,site,code):
         
         self.code = None
-        
         self.code_verifier = None
         self.access_token = None
         self.refresh_token = None
+        self.nickname = None
         self.user_id = None
         self.db = HandleDB()
         self.site = site
         self.code = code
     
     def datos_app(self):
-        datos = self.db.cargar_app()
+        datos = self.db.cargar_app(self.site)
         self.app_id = datos[0]
         self.client_secret = datos[1]
         self.redirect_uri = datos[2]
@@ -58,7 +59,23 @@ class ClienteNuevo():
         
         self.access_token=respuesta['access_token']
         self.user_id=respuesta['user_id']
-        self.refresh_token=respuesta['refresh_token']          
+        self.refresh_token=respuesta['refresh_token'] 
+    
+    def name(self):
+        respuesta=funciones_ml.users_me(self) 
+        respuesta = json.loads(respuesta.text)
+        self.nickname = respuesta['nickname']
+    
+    def registrar(self):
+        resp = self.db.consulta_cliente(self.user_id)
+        if resp[0] == 0:
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            datos = (self.app_id,self.code,self.access_token,self.user_id,self.refresh_token,self.nickname,current_time)
+            self.db.insert(datos)
+        else:
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            datos = (self.code,self.access_token,self.refresh_token,self.nickname,current_time,self.user_id)
+            self.db.update_user(datos)
 
 
 class HandleDB():
@@ -69,32 +86,29 @@ class HandleDB():
 
         # Asegúrate de tener la tabla 'users' creada en tu base de datos PostgreSQL con la misma estructura.
 
-    def cargar_app(self):
-        self._cur.execute(f"select app_id, client_secret, uri from aplicaciones where site = 'MLA'")
+    def cargar_app(self,site):
+        self._cur.execute(f"select app_id, client_secret, uri from aplicaciones where site = {site}")
         data = self._cur.fetchone()
         return data
     
     def consulta_cliente(self,user_id):
-        self._cur.execute(f"select count(*) from conexion_clientes where user_id = {user_id}")
+        self._cur.execute(f"select count(*) from conexion_clientes where user_id = {str(user_id)}")
         data = self._cur.fetchone()
         return data
 
-    def get_only(self, data_user):
-        self._cur.execute("SELECT * FROM users WHERE username = %s", (data_user,))
-        data = self._cur.fetchone()
-        return data
+    def update_user(self, datos):
+        update_query = """
+            UPDATE conexion_clientes 
+            SET code = %s, access_token = %s, refresh_token = %s,nickname = %s, last_updated = %s
+            WHERE user_id = %s
+        """
+        self._cur.execute(update_query, datos)
+        self._con.commit()
 
-    def insert(self, data_user):
+    def insert(self, datos):
         self._cur.execute(
-            "INSERT INTO users VALUES(%s, %s, %s, %s, %s, %s)",
-            (
-                data_user["id"],
-                data_user["firstname"],
-                data_user["lastname"],
-                data_user["username"],
-                data_user["country"],
-                data_user["password_user"]
-            )
+            "INSERT INTO conexion_clientes VALUES(%s, %s, %s, %s, %s, %s)",
+            datos
         )
         self._con.commit()
 
