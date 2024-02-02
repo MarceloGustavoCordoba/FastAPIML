@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.responses import JSONResponse
 from datetime import datetime
-from procesos import notificaciones,alta
+from procesos import notificaciones#,alta
 import logging
 import pandas as pd
 from sqlalchemy import create_engine,text
