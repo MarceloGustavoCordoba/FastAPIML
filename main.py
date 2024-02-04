@@ -45,7 +45,7 @@ async def redireccionamiento(code: str = Query(...)):
         cliente.token()
         cliente.name()
         cliente.registrar()
-        return f"Bienvenido {cliente.nickname}! En breve tendras disponible tu historial en tu Weiman."
+        return f"Bienvenido {cliente.nickname}! En breve tendras disponible tu historial en Weiman."
     except Exception as e:
         traza_pila = traceback.format_exc()
         logging.error(f'Error al procesar la notificación: {e}\n{traza_pila }')
