@@ -84,8 +84,6 @@ class HandleDB():
         self._con = psycopg2.connect(conn_str)
         self._cur = self._con.cursor()
 
-        # Asegúrate de tener la tabla 'users' creada en tu base de datos PostgreSQL con la misma estructura.
-
     def cargar_app(self,site):
         print(site)
         print(f"select app_id, client_secret, uri from aplicaciones where site = '{site}'")
