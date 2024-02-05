@@ -6,7 +6,7 @@ import logging,traceback
 import pandas as pd
 from sqlalchemy import create_engine,text
 import os
-import json
+import json,time
 import sys 
 from models import clases
 
@@ -36,9 +36,6 @@ async def webhook(request: Request):
 # modificar para que al autorizar un cliente nuevo lea el codigo y realice el regitro en la bbdd de la base de datos y comienze a poblar la bbdd
 @app.get('/MLA_redirect')
 async def redireccionamiento(code: str = Query(...)):
- 
-#        return code   
-    
     try:
         cliente = clases.ClienteNuevo("MLA",code)  
         cliente.datos_app()
@@ -50,6 +47,10 @@ async def redireccionamiento(code: str = Query(...)):
         traza_pila = traceback.format_exc()
         logging.error(f'Error al procesar la notificación: {e}\n{traza_pila }')
         raise HTTPException(status_code=500, detail='Internal Server Error')
-    
+
+@app.get('/prueba')
+async def prueba():
+    time.sleep(30)
+    return "listo"
       
     
