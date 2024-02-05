@@ -1,4 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request, Query
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
+from apscheduler.triggers.interval import IntervalTrigger
 from fastapi.responses import JSONResponse
 from datetime import datetime
 from procesos import notificaciones#,alta
@@ -17,6 +20,17 @@ if not os.path.exists(carpeta_logs):
 
 ruta_archivo_log = os.path.join(carpeta_logs, f"log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt")
 logging.basicConfig(filename=ruta_archivo_log, level=logging.ERROR)
+
+def tarea_diaria():    
+    print(f"tarea ejecutada")
+    
+@app.on_event("startup")
+def iniciar_planificador():
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(tarea_diaria,IntervalTrigger(seconds=5))
+    scheduler.start()
+    print("planificador iniciado")
+    
 
 @app.get('/')
 def read_root():
