@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request, Query
+from fastapi_utils.tasks import repeat_every
 from fastapi.responses import JSONResponse
 from datetime import datetime
 from procesos import notificaciones#,alta
@@ -17,6 +18,12 @@ if not os.path.exists(carpeta_logs):
 
 ruta_archivo_log = os.path.join(carpeta_logs, f"log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt")
 logging.basicConfig(filename=ruta_archivo_log, level=logging.ERROR)
+
+@app.on_event("startup")
+@repeat_every(seconds=5)
+async def test_print():
+    time.sleep(10)
+    print("hello world")
     
 @app.get('/')
 def read_root():
@@ -47,10 +54,3 @@ async def redireccionamiento(code: str = Query(...)):
         traza_pila = traceback.format_exc()
         logging.error(f'Error al procesar la notificación: {e}\n{traza_pila }')
         raise HTTPException(status_code=500, detail='Internal Server Error')
-
-@app.get('/prueba')
-async def prueba():
-    time.sleep(30)
-    return "listo"
-      
-    
