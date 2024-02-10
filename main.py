@@ -30,7 +30,7 @@ def iniciar_planificador():
         print("procesar notificaciones")
         await procesar_notificaciones()
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(ejecutar_tarea,IntervalTrigger(hours=12))
+    scheduler.add_job(ejecutar_tarea,CronTrigger(hour=20))
     scheduler.start()
     print("planificador iniciado")
     
