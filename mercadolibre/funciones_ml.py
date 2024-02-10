@@ -1,6 +1,5 @@
 import requests
 import time
-from mercadolibre import utils
 from datetime import datetime, timedelta
 
 
@@ -46,7 +45,7 @@ def GET(url,headers,payload,parametros):
         return response
     except requests.exceptions.HTTPError as err:
         if err.response.status_code == 401:
-            utils.actualizacion_token(parametros) 
+            parametros.actualizacion_token() 
             headers['Authorization'] = f'Bearer {parametros.access_token}'
             response = requests.get(url, headers=headers, data=payload)
             response.raise_for_status()
@@ -109,6 +108,13 @@ def items_vendedor(parametros):
 ## obtiene preguntas y respuestas
 def preg_resp(parametros,MLA):
     url = f"https://api.mercadolibre.com/questions/search?item={MLA}&api_version=4"
+    headers = {'Authorization': 'Bearer ' + parametros.access_token}
+    payload = {}
+    response = GET(url, headers, payload, parametros)
+    return response
+
+def pregunta(parametros,id):
+    url = f"https://api.mercadolibre.com/questions/{str(id)}?api_version=4"
     headers = {'Authorization': 'Bearer ' + parametros.access_token}
     payload = {}
     response = GET(url, headers, payload, parametros)
