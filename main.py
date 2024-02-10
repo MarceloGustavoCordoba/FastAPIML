@@ -25,7 +25,9 @@ logging.basicConfig(filename=ruta_archivo_log, level=logging.ERROR)
 @app.on_event("startup")
 def iniciar_planificador():
     async def ejecutar_tarea():
+        print("carga inicial")
         await carga_inicial()
+        print("procesar notificaciones")
         await procesar_notificaciones()
     scheduler = AsyncIOScheduler()
     scheduler.add_job(ejecutar_tarea,IntervalTrigger(hours=12))
