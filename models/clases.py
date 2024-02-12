@@ -24,6 +24,7 @@ class notification:
     def registrar_notificacion(self,contenido):
         try:
             noti_df = json_normalize(contenido)
+            self.db.borrar_notificacion(contenido['id'])
             self.db.cargar_notificacion(noti_df)
             return 200
         except Exception as e:
@@ -546,6 +547,13 @@ class HandleDB():
             query =f"DELETE FROM public.cargos_full where document_info_document_id in ({documentos[0]})"
         else:
             query = f"DELETE FROM public.cargos_full where document_info_document_id in {tuple(documentos)}"
+    
+        self._cur.execute(query)
+        self._con.commit()
+        return 200
+
+    def borrar_notificacion(self,id):
+        query = f"DELETE FROM public.notificaciones where id = '{id}'"
     
         self._cur.execute(query)
         self._con.commit()
