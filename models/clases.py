@@ -553,7 +553,7 @@ class HandleDB():
         return 200
 
     def borrar_notificacion(self,id):
-        query = f"DELETE FROM public.notificaciones where id = '{id}'"
+        query = f"DELETE FROM public.notificaciones where _id = '{id}'"
     
         self._cur.execute(query)
         self._con.commit()
