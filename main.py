@@ -22,6 +22,7 @@ if not os.path.exists(carpeta_logs):
 ruta_archivo_log = os.path.join(carpeta_logs, f"log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt")
 logging.basicConfig(filename=ruta_archivo_log, level=logging.ERROR)
 
+"""
 @app.on_event("startup")
 def iniciar_planificador():
     async def ejecutar_tarea():
@@ -33,7 +34,7 @@ def iniciar_planificador():
     scheduler.add_job(ejecutar_tarea,IntervalTrigger(minutes=30))
     scheduler.start()
     print("planificador iniciado")
-    
+    """
 # end points___________________________________________________________________________________________
 
 @app.get('/')
